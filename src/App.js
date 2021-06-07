@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import { listSongs } from './graphql/queries';
@@ -10,11 +10,14 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PauseIcon from '@material-ui/icons/Pause';
 
+import ReactPlayer from 'react-player';
+
 Amplify.configure(awsconfig);
 
 const App = () => {
   const [songs, setSongs] = useState([]);
   const [songPlaying, setSongPlaying] = useState('');
+  const [audioURL, setAudioURL] = useState('');
 
   useEffect(() => {
     fetchSongs();
@@ -25,8 +28,18 @@ const App = () => {
       setSongPlaying('');
       return;
     }
-    setSongPlaying(idx);
-    return;
+    const songFilePath = songs[idx].filePath;
+    try {
+      const fileAccessURL = await Storage.get(songFilePath, { expires: 60 });
+      console.log('access url', fileAccessURL);
+      setSongPlaying(idx);
+      setAudioURL(fileAccessURL);
+      return;
+    } catch (error) {
+      console.error('error accessing the file from S3', error);
+      setAudioURL('');
+      setSongPlaying('');
+    }
   };
 
   const fetchSongs = async () => {
@@ -68,22 +81,36 @@ const App = () => {
         {songs.map((song, idx) => {
           return (
             <article className='song__card' key={`song${idx}`}>
-              <div className='play__button'>
-                <IconButton aria-label='play' onClick={() => toggleSong(idx)}>
-                  {songPlaying === idx ? <PauseIcon /> : <PlayArrowIcon />}
-                </IconButton>
+              <div className='song__card__top'>
+                <div className='play__button'>
+                  <IconButton aria-label='play' onClick={() => toggleSong(idx)}>
+                    {songPlaying === idx ? <PauseIcon /> : <PlayArrowIcon />}
+                  </IconButton>
+                </div>
+
+                <div className='song__title'>{song.name}</div>
+                <div className='song__owner'>{song.owner}</div>
+
+                <div className='like__button'>
+                  <IconButton aria-label='like' onClick={() => addLike(idx)}>
+                    <FavoriteIcon />
+                  </IconButton>
+                  {song.like}
+                </div>
+                <div className='song__desc'>{song.description}</div>
               </div>
 
-              <div className='song__title'>{song.name}</div>
-              <div className='song__owner'>{song.owner}</div>
-
-              <div className='like__button'>
-                <IconButton aria-label='like' onClick={() => addLike(idx)}>
-                  <FavoriteIcon />
-                </IconButton>
-                {song.like}
+              <div className='song__card__bottom'>
+                {songPlaying === idx ? (
+                  <ReactPlayer
+                    url={audioURL}
+                    controls
+                    playing
+                    heigh='20px'
+                    onPause={() => toggleSong(idx)}
+                  />
+                ) : null}
               </div>
-              <div className='song__desc'>{song.description}</div>
             </article>
           );
         })}

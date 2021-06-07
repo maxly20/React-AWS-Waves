@@ -9,7 +9,7 @@
 }
 .app {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: whitesmoke;
 }
 .navbar {
@@ -29,9 +29,10 @@
 .songList {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 0 5rem;
 }
-.song__card {
+.song__card__top {
   display: flex;
   align-items: center;
   height: 10vh;
@@ -63,4 +64,11 @@
   flex: 0.2;
   display: flex;
   justify-content: flex-start;
+}
+
+.song__card__bottom {
+  // min-height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
