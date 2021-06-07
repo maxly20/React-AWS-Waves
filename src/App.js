@@ -8,15 +8,26 @@ import { updateSong } from './graphql/mutations';
 import { IconButton } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import PauseIcon from '@material-ui/icons/Pause';
 
 Amplify.configure(awsconfig);
 
 const App = () => {
   const [songs, setSongs] = useState([]);
+  const [songPlaying, setSongPlaying] = useState('');
 
   useEffect(() => {
     fetchSongs();
   }, []);
+
+  const toggleSong = async idx => {
+    if (songPlaying === idx) {
+      setSongPlaying('');
+      return;
+    }
+    setSongPlaying(idx);
+    return;
+  };
 
   const fetchSongs = async () => {
     try {
@@ -58,8 +69,8 @@ const App = () => {
           return (
             <article className='song__card' key={`song${idx}`}>
               <div className='play__button'>
-                <IconButton aria-label='play'>
-                  <PlayArrowIcon />
+                <IconButton aria-label='play' onClick={() => toggleSong(idx)}>
+                  {songPlaying === idx ? <PauseIcon /> : <PlayArrowIcon />}
                 </IconButton>
               </div>
 
