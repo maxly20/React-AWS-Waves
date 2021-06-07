@@ -4,6 +4,10 @@ import awsconfig from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import { listSongs } from './graphql/queries';
 
+import { Paper, IconButton } from '@material-ui/core';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
 Amplify.configure(awsconfig);
 
 const App = () => {
@@ -30,6 +34,29 @@ const App = () => {
         <AmplifySignOut />
         <h2>My App Content</h2>
       </header>
+      <div className='songList'>
+        {songs.map(song => {
+          return (
+            <Paper variant='outlined' elevation={2}>
+              <div className='songCard'>
+                <IconButton aria-label='play'>
+                  <PlayArrowIcon />
+                </IconButton>
+                <div>
+                  <div className='songTitle'>{song.title}</div>
+                  <div className='songOwner'>{song.owner}</div>
+                </div>
+                <div>
+                  <IconButton aria-label='like'>
+                    <FavoriteIcon />
+                  </IconButton>
+                </div>
+                <div className='songDescription'>{song.description}</div>
+              </div>
+            </Paper>
+          );
+        })}
+      </div>
     </div>
   );
 };
