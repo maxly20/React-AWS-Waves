@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-waves-dev-110657-authRole",
+      "UnauthRoleArn": "arn:aws:iam::414533804560:role/amplify-waves-dev-110657-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::414533804560:role/amplify-waves-dev-110657-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-waves-dev-110657-deployment",
+      "UnauthRoleName": "amplify-waves-dev-110657-unauthRole",
+      "StackName": "amplify-waves-dev-110657",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:414533804560:stack/amplify-waves-dev-110657/aa5a38a0-c72c-11eb-85dc-0a3e37394c00",
+      "AmplifyAppId": "dhhps73coau0h"
+    }
+  }
+}
