@@ -10,9 +10,57 @@
 .app {
   width: 100vw;
   height: 100vh;
+  background-color: whitesmoke;
+}
+.navbar {
+  min-height: 10vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5rem;
   background-color: rgba(36, 40, 48, 0.788);
   color: white;
+}
+.logo {
+  font-family: 'Righteous', cursive;
+  font-size: 3rem;
+}
+.songList {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  padding: 0 5rem;
+}
+.song__card {
+  display: flex;
   align-items: center;
+  height: 10vh;
+  border-bottom: 1px solid rgb(228, 228, 228);
+}
+.play__button {
+  flex: 0.1;
+  display: flex;
+  justify-content: flex-start;
+}
+.song__title {
+  font-weight: bold;
+  flex: 0.3;
+  display: flex;
+  justify-content: flex-start;
+}
+.song__owner {
+  flex: 0.2;
+  display: flex;
+  justify-content: flex-start;
+}
+.like__button {
+  flex: 0.2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.song__desc {
+  flex: 0.2;
+  display: flex;
+  justify-content: flex-start;
 }

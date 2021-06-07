@@ -3,8 +3,9 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import { listSongs } from './graphql/queries';
+import { updateSong } from './graphql/mutations';
 
-import { Paper, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
@@ -28,35 +29,54 @@ const App = () => {
     }
   };
 
+  const addLike = async idx => {
+    try {
+      const song = songs[idx];
+      song.like = song.like + 1;
+      delete song.createdAt;
+      delete song.updatedAt;
+
+      const songData = await API.graphql(
+        graphqlOperation(updateSong, { input: song })
+      );
+      const songList = [...songs];
+      songList[idx] = songData.data.updateSong;
+      setSongs(songList);
+    } catch (error) {
+      console.log('error on adding like to song', error);
+    }
+  };
+
   return (
     <div className='app'>
-      <header className='app__header'>
+      <nav className='navbar'>
+        <h2 className='logo'>WAVES</h2>
         <AmplifySignOut />
-        <h2>My App Content</h2>
-      </header>
-      <div className='songList'>
-        {songs.map(song => {
+      </nav>
+      <section className='songList'>
+        {songs.map((song, idx) => {
           return (
-            <Paper variant='outlined' elevation={2}>
-              <div className='songCard'>
+            <article className='song__card' key={`song${idx}`}>
+              <div className='play__button'>
                 <IconButton aria-label='play'>
                   <PlayArrowIcon />
                 </IconButton>
-                <div>
-                  <div className='songTitle'>{song.title}</div>
-                  <div className='songOwner'>{song.owner}</div>
-                </div>
-                <div>
-                  <IconButton aria-label='like'>
-                    <FavoriteIcon />
-                  </IconButton>
-                </div>
-                <div className='songDescription'>{song.description}</div>
               </div>
-            </Paper>
+
+              <div className='song__title'>{song.name}</div>
+              <div className='song__owner'>{song.owner}</div>
+
+              <div className='like__button'>
+                <IconButton aria-label='like' onClick={() => addLike(idx)}>
+                  <FavoriteIcon />
+                </IconButton>
+                {song.like}
+              </div>
+              <div className='song__desc'>{song.description}</div>
+            </article>
           );
         })}
-      </div>
+      </section>
     </div>
   );
 };
