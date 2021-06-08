@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
+
+// AMPLIFY
 import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import { listSongs } from './graphql/queries';
 import { updateSong } from './graphql/mutations';
 
+// MATERIAL UI
 import { IconButton } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PauseIcon from '@material-ui/icons/Pause';
 
+// REACT PLAYER
 import ReactPlayer from 'react-player';
+
+// ========= MAIN ===========
 
 Amplify.configure(awsconfig);
 
