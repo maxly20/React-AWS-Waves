@@ -112,7 +112,7 @@ const App = () => {
                     url={audioURL}
                     controls
                     playing
-                    heigh='20px'
+                    height='60px'
                     onPause={() => toggleSong(idx)}
                   />
                 ) : null}
