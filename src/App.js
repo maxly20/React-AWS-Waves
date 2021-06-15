@@ -8,10 +8,12 @@ import { listSongs } from './graphql/queries';
 import { updateSong } from './graphql/mutations';
 
 // MATERIAL UI
-import { IconButton } from '@material-ui/core';
+import { IconButton, TextField } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PauseIcon from '@material-ui/icons/Pause';
+import AddIcon from '@material-ui/icons/Add';
+import PublishIcon from '@material-ui/icons/Publish';
 
 // REACT PLAYER
 import ReactPlayer from 'react-player';
@@ -24,6 +26,7 @@ const App = () => {
   const [songs, setSongs] = useState([]);
   const [songPlaying, setSongPlaying] = useState('');
   const [audioURL, setAudioURL] = useState('');
+  const [showAddSong, setShowAddSong] = useState(false);
 
   useEffect(() => {
     fetchSongs();
@@ -120,9 +123,37 @@ const App = () => {
             </article>
           );
         })}
+        {showAddSong ? (
+          <AddSong
+            onUpload={() => {
+              setShowAddSong(false);
+              fetchSongs();
+            }}
+          />
+        ) : (
+          <IconButton onClick={() => setShowAddSong(true)}>
+            <AddIcon />
+          </IconButton>
+        )}
       </section>
     </div>
   );
 };
 
 export default withAuthenticator(App);
+
+const AddSong = ({ onUpload }) => {
+  const uploadSong = () => {
+    onUpload();
+  };
+  return (
+    <div className='newSong'>
+      <TextField label='Title' />
+      <TextField label='Artist' />
+      <TextField label='Description' />
+      <IconButton onClick={uploadSong}>
+        <PublishIcon />
+      </IconButton>
+    </div>
+  );
+};
